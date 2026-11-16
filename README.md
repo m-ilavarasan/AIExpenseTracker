@@ -36,6 +36,15 @@ The analysis can be viewed as:
 2. **Keyword results** — matching transactions and their combined expense totals.
 3. **Monthly totals** — expenses grouped by calendar month.
 
+## Spending chat
+
+After analyzing a statement, ask Gemini natural-language questions about its
+monthly, category, and top-100 merchant spending totals. The chat uses
+aggregate data and cleaned merchant labels from the analyzed statement; it
+does not send raw transaction rows, original descriptions, or UPI IDs.
+Configure `GEMINI_API_KEY` in the server environment or `.env` file to use
+Gemini features.
+
 ## Getting started
 
 1. Export your transaction history from your bank or payment service.
