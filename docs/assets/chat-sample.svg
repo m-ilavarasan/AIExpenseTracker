@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrative spending chat sample</title>
+  <desc id="desc">Synthetic example showing a natural-language question answered locally from report monthly aggregates.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f3f6fb; }
+      .panel { fill: #fff; stroke: #dfe6f0; stroke-width: 1.3; }
+      .title { font: 700 24px Arial, sans-serif; fill: #1b2944; }
+      .subtitle { font: 13px Arial, sans-serif; fill: #6f7c92; }
+      .label { font: 700 12px Arial, sans-serif; fill: #78859a; }
+      .body { font: 15px Arial, sans-serif; fill: #263650; }
+      .small { font: 12px Arial, sans-serif; fill: #68768e; }
+      .user { fill: #eaf1ff; stroke: #d6e3ff; }
+      .assistant { fill: #f7f9fc; stroke: #e4e9f1; }
+      .green { fill: #eaf8f1; }
+      .greenText { font: 700 11px Arial, sans-serif; fill: #2b8155; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="600" rx="20"/>
+  <rect class="panel" x="70" y="38" width="1060" height="524" rx="18"/>
+  <text class="title" x="108" y="88">Ask about your spending</text>
+  <text class="subtitle" x="108" y="116">Illustrative conversation · synthetic data · report totals stay in the app for numeric answers</text>
+
+  <rect class="user" x="390" y="158" width="690" height="78" rx="15"/>
+  <text class="label" x="415" y="184">YOU</text>
+  <text class="body" x="415" y="213">Which month did I spend the most?</text>
+
+  <rect class="assistant" x="110" y="260" width="850" height="132" rx="15"/>
+  <rect class="green" x="136" y="280" width="144" height="24" rx="10"/>
+  <text class="greenText" x="150" y="297">ANSWERED LOCALLY</text>
+  <text class="body" x="136" y="333">You spent the most in February 2026: ₹18,420.00</text>
+  <text class="body" x="136" y="358">across 41 transactions.</text>
+  <text class="small" x="136" y="379">This report lookup does not make a Gemini request.</text>
+
+  <rect class="user" x="390" y="414" width="690" height="78" rx="15"/>
+  <text class="label" x="415" y="440">YOU</text>
+  <text class="body" x="415" y="469">What spending patterns stand out?</text>
+
+  <rect x="110" y="510" width="850" height="34" rx="12" fill="#edf1f7"/>
+  <text class="small" x="132" y="532">Open-ended questions use one streamed Gemini response with selected aggregate context.</text>
+</svg>

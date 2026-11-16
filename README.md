@@ -1,55 +1,89 @@
-# Personal Expense Tracker
+# Private AI Expense Tracker
 
-Personal Expense Tracker helps you understand your spending by analyzing a transaction history file. It organizes transactions into useful summaries so you can see where your money goes and how your spending changes over time.
+Turn a bank statement into a categorized spending report, then ask questions
+about the results. The app is built with Streamlit, pandas, and Google's Gemini
+API. It processes an uploaded statement in the current session and keeps the
+Gemini key on the server.
 
-## What it tracks
+> **Portfolio visuals:** the images below are illustrative mockups generated
+> from synthetic transactions. They are not screenshots of a real account or
+> live deployment.
 
-- **Spending by category** — total expenses for each transaction category, such as groceries, transport, or utilities.
-- **Spending by keyword** — find and group transactions by words in their descriptions or merchant names. For example, searching for `coffee` can help identify related purchases even when they have different descriptions.
-- **Monthly expenditure** — calculate expense totals month by month to make spending patterns easier to compare.
+## Sample output
 
-## Transaction history
+<p align="center">
+  <img src="docs/assets/dashboard-sample.svg" alt="Illustrative expense dashboard with category summary and transaction preview" width="100%">
+</p>
 
-Provide a transaction history file containing the information needed to identify and summarize each transaction. At minimum, each transaction should have:
+<p align="center">
+  <img src="docs/assets/chat-sample.svg" alt="Illustrative spending chat using monthly spending totals" width="100%">
+</p>
 
-- A transaction date
-- A description or merchant name
-- A category, if available
-- An amount
+## End-to-end architecture
 
-For example, a CSV file might look like this:
+<p align="center">
+  <img src="docs/assets/architecture.svg" alt="End-to-end architecture from statement upload through report and Gemini chat" width="100%">
+</p>
 
-```csv
-date,description,category,amount
-2026-01-05,Neighborhood Market,Groceries,42.50
-2026-01-08,City Bus,Transport,12.00
-2026-02-02,Neighborhood Market,Groceries,35.25
+See [docs/architecture.md](docs/architecture.md) for the editable Mermaid
+diagram, Gemini API details, data handling notes, and current limitations.
+
+## Features
+
+- Upload CSV or Excel bank statements and map the date, narration, and debit
+  columns.
+- Categorize unique merchants with local keyword rules and a JSON cache before
+  sending uncached merchant tokens to Gemini in batches of up to 150.
+- Explore spending by category and preview categorized transactions; download
+  the complete result as CSV.
+- Ask spending questions. Common numeric report questions are answered locally;
+  other questions use a streamed Gemini response based on relevant aggregates.
+- Reuse parsed uploads during Streamlit reruns and report basic parsing,
+  processing, and Gemini batch timings.
+
+## Run locally
+
+Requires Python 3.10+ and a Gemini API key for AI categorization and open-ended
+chat.
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+Copy-Item .env.example .env
 ```
 
-The example is illustrative; use the column names and file format supported by your transaction export.
+Set `GEMINI_API_KEY` in `.env`, then start Streamlit:
 
-## Reports
+```powershell
+streamlit run app.py
+```
 
-The analysis can be viewed as:
+Do not commit `.env` or paste the key into the app UI. A key is required to
+start analysis in the current app, including reports that might otherwise only
+use local/cache categories.
 
-1. **Category totals** — expenses grouped by category.
-2. **Keyword results** — matching transactions and their combined expense totals.
-3. **Monthly totals** — expenses grouped by calendar month.
+## Project layout
 
-## Spending chat
+```text
+app.py                  Streamlit UI, categorization, reporting, and chat
+merchant_cache.json     Generated local merchant-to-category cache
+docs/architecture.md    System flow, API details, and data handling
+docs/assets/            Architecture and synthetic sample visuals
+tests/                  Unit and Streamlit dashboard tests
+requirements.txt        Python dependencies
+.env.example            Environment variable template (no real key)
+```
 
-After analyzing a statement, ask Gemini natural-language questions about its
-monthly, category, and top-100 merchant spending totals. The chat uses
-aggregate data and cleaned merchant labels from the analyzed statement; it
-does not send raw transaction rows, original descriptions, or UPI IDs.
-Configure `GEMINI_API_KEY` in the server environment or `.env` file to use
-Gemini features.
+## Tests
 
-## Getting started
+```powershell
+python -m unittest discover -s tests -p "test_*.py"
+```
 
-1. Export your transaction history from your bank or payment service.
-2. Make sure the file includes dates, descriptions, categories where available, and amounts.
-3. Use the transaction history file as the input for the expense analysis.
-4. Review the category, keyword, and monthly expenditure summaries.
+## Current scope
 
-> **Note:** The transaction file format and the exact way to run the analysis depend on the project implementation. Keep your transaction history private and avoid sharing files containing sensitive financial or account information.
+The app analyzes the uploaded statement in the current Streamlit session. The
+merchant cache is local; persistent multi-statement SQLite history is not part
+of the active dashboard flow. See the architecture notes for additional privacy
+and data-scope details.

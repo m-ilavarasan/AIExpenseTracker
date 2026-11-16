@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="790" viewBox="0 0 1200 790" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrative expense report sample</title>
+  <desc id="desc">Synthetic sample dashboard with expense totals, category bars, and categorized transaction rows.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f3f6fb; }
+      .panel { fill: #fff; stroke: #e1e7f0; stroke-width: 1.2; }
+      .navy { fill: #182744; }
+      .h1 { font: 700 25px Arial, sans-serif; fill: #182744; }
+      .h2 { font: 700 17px Arial, sans-serif; fill: #21314f; }
+      .label { font: 12px Arial, sans-serif; fill: #738098; }
+      .value { font: 700 23px Arial, sans-serif; fill: #1e2d49; }
+      .text { font: 13px Arial, sans-serif; fill: #465671; }
+      .small { font: 11px Arial, sans-serif; fill: #7b879a; }
+      .white { font: 700 16px Arial, sans-serif; fill: #fff; }
+      .barbg { fill: #edf1f7; rx: 5; }
+      .bar { fill: #4b7cf3; rx: 5; }
+      .line { stroke: #e8edf4; }
+      .pill { fill: #eaf8f1; rx: 10; }
+      .pilltext { font: 700 11px Arial, sans-serif; fill: #2a8054; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="790" rx="20"/>
+  <path class="navy" d="M20 20 H1180 V96 H20 Z" rx="18"/>
+  <text class="white" x="50" y="62">Private Bank Statement AI Expense Tracker</text>
+  <text x="50" y="82" style="font:12px Arial,sans-serif;fill:#c5d2e8">ILLUSTRATIVE SAMPLE · SYNTHETIC DATA ONLY</text>
+  <text class="small" x="970" y="62" style="fill:#d7e0f0">February 2026 statement</text>
+
+  <rect class="panel" x="42" y="122" width="350" height="112" rx="14"/>
+  <text class="label" x="66" y="155">TOTAL EXPENSES</text>
+  <text class="value" x="66" y="192">₹42,680.00</text>
+  <text class="small" x="66" y="215">Across 86 debit transactions</text>
+
+  <rect class="panel" x="425" y="122" width="350" height="112" rx="14"/>
+  <text class="label" x="449" y="155">TOP CATEGORY</text>
+  <text class="value" x="449" y="192">Food &amp; Dining</text>
+  <text class="small" x="449" y="215">₹12,450.00 · 29.2% of spend</text>
+
+  <rect class="panel" x="808" y="122" width="350" height="112" rx="14"/>
+  <text class="label" x="832" y="155">LOCAL MATCHING</text>
+  <text class="value" x="832" y="192">78 merchants</text>
+  <text class="small" x="832" y="215">Resolved by cache or local rules</text>
+
+  <rect class="panel" x="42" y="258" width="535" height="320" rx="14"/>
+  <text class="h2" x="68" y="294">Expense Summary by Category</text>
+  <text class="small" x="68" y="316">Total amount · illustrative values in INR</text>
+  <text class="text" x="68" y="358">Food &amp; Dining</text>
+  <rect class="barbg" x="220" y="343" width="280" height="16"/><rect class="bar" x="220" y="343" width="258" height="16"/>
+  <text class="text" x="430" y="360">₹12,450</text>
+  <text class="text" x="68" y="402">Rent &amp; Housing</text>
+  <rect class="barbg" x="220" y="387" width="280" height="16"/><rect class="bar" x="220" y="387" width="212" height="16"/>
+  <text class="text" x="430" y="404">₹10,200</text>
+  <text class="text" x="68" y="446">Shopping</text>
+  <rect class="barbg" x="220" y="431" width="280" height="16"/><rect class="bar" x="220" y="431" width="132" height="16"/>
+  <text class="text" x="430" y="448">₹6,340</text>
+  <text class="text" x="68" y="490">Travel &amp; Fuel</text>
+  <rect class="barbg" x="220" y="475" width="280" height="16"/><rect class="bar" x="220" y="475" width="88" height="16"/>
+  <text class="text" x="430" y="492">₹4,210</text>
+  <text class="text" x="68" y="534">Other categories</text>
+  <rect class="barbg" x="220" y="519" width="280" height="16"/><rect class="bar" x="220" y="519" width="58" height="16"/>
+  <text class="text" x="430" y="536">₹9,480</text>
+
+  <rect class="panel" x="600" y="258" width="558" height="320" rx="14"/>
+  <text class="h2" x="626" y="294">Report insights</text>
+  <rect class="pill" x="626" y="321" width="150" height="25"/><text class="pilltext" x="640" y="338">LOCAL-FIRST</text>
+  <text class="text" x="626" y="378">• Cached and rule-based matches avoid unnecessary calls.</text>
+  <text class="text" x="626" y="413">• Unknown unique merchants are grouped for Gemini.</text>
+  <text class="text" x="626" y="448">• Numeric questions can be answered from report totals.</text>
+  <text class="text" x="626" y="483">• Full categorized output is available as a CSV download.</text>
+  <text class="small" x="626" y="538">Preview shows up to 1,000 transactions in the app.</text>
+
+  <rect class="panel" x="42" y="602" width="1116" height="142" rx="14"/>
+  <text class="h2" x="68" y="638">Categorized Transaction Preview</text>
+  <text class="label" x="68" y="672">DATE</text><text class="label" x="250" y="672">CLEAN MERCHANT</text><text class="label" x="650" y="672">CATEGORY</text><text class="label" x="1010" y="672">AMOUNT</text>
+  <line class="line" x1="68" y1="684" x2="1130" y2="684"/>
+  <text class="text" x="68" y="710">2026-02-04</text><text class="text" x="250" y="710">CITY CAFE</text><text class="text" x="650" y="710">Food &amp; Dining</text><text class="text" x="1010" y="710">₹640.00</text>
+  <text class="text" x="68" y="733">2026-02-05</text><text class="text" x="250" y="733">METRO MART</text><text class="text" x="650" y="733">Groceries</text><text class="text" x="1010" y="733">₹1,280.00</text>
+</svg>

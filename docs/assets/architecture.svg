@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Expense Tracker end-to-end architecture</title>
+  <desc id="desc">Synthetic architecture diagram showing statement upload, local merchant categorization and cache, Gemini categorization, dashboard, local numeric chat, and Gemini chat.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#7183a5"/>
+    </marker>
+    <style>
+      .bg { fill: #f5f7fb; }
+      .title { font: 700 28px Arial, sans-serif; fill: #17233c; }
+      .subtitle { font: 14px Arial, sans-serif; fill: #64728b; }
+      .box { fill: #fff; stroke: #d7dfec; stroke-width: 1.5; rx: 14; }
+      .blue { fill: #edf4ff; stroke: #a9c5f7; }
+      .purple { fill: #f3efff; stroke: #c9b9fb; }
+      .green { fill: #eaf8f1; stroke: #a8dfbf; }
+      .orange { fill: #fff4e8; stroke: #f2c99e; }
+      .head { font: 700 16px Arial, sans-serif; fill: #1d2b45; }
+      .body { font: 13px Arial, sans-serif; fill: #52617b; }
+      .tiny { font: 12px Arial, sans-serif; fill: #66748c; }
+      .arrow { fill: none; stroke: #7183a5; stroke-width: 2; marker-end: url(#arrow); }
+      .dash { fill: none; stroke: #8998b2; stroke-width: 1.8; stroke-dasharray: 6 5; marker-end: url(#arrow); }
+      .tag { fill: #e7edf7; rx: 9; }
+      .tagtext { font: 700 11px Arial, sans-serif; fill: #52617b; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="760" rx="22"/>
+  <text class="title" x="48" y="58">Private AI Expense Tracker</text>
+  <text class="subtitle" x="48" y="84">End-to-end data flow · local-first classification · Gemini only for uncached labels and open-ended chat</text>
+
+  <rect class="box blue" x="50" y="130" width="210" height="96"/>
+  <text class="head" x="70" y="161">1 · Statement</text>
+  <text class="body" x="70" y="185">CSV / Excel upload</text>
+  <text class="body" x="70" y="205">Map date, narration, debit</text>
+
+  <rect class="box" x="315" y="130" width="230" height="96"/>
+  <text class="head" x="335" y="161">2 · Prepare data</text>
+  <text class="body" x="335" y="185">pandas parses and filters</text>
+  <text class="body" x="335" y="205">Positive debit transactions</text>
+
+  <rect class="box green" x="600" y="130" width="250" height="96"/>
+  <text class="head" x="620" y="161">3 · Local-first match</text>
+  <text class="body" x="620" y="185">Clean unique narration tokens</text>
+  <text class="body" x="620" y="205">Cache → keyword rules</text>
+
+  <rect class="box purple" x="910" y="130" width="240" height="96"/>
+  <text class="head" x="930" y="161">4 · Gemini categorize</text>
+  <text class="body" x="930" y="185">Unmatched tokens only</text>
+  <text class="body" x="930" y="205">JSON schema · batches ≤150</text>
+
+  <path class="arrow" d="M260 178 H307"/>
+  <path class="arrow" d="M545 178 H592"/>
+  <path class="arrow" d="M850 178 H902"/>
+  <path class="dash" d="M1030 230 V270 H730 V235"/>
+  <text class="tiny" x="820" y="263">save new mappings to local cache</text>
+
+  <rect class="box blue" x="315" y="320" width="350" height="116"/>
+  <text class="head" x="337" y="352">5 · Report in Streamlit</text>
+  <text class="body" x="337" y="378">Category totals · transaction preview</text>
+  <text class="body" x="337" y="399">Complete categorized CSV download</text>
+  <text class="tiny" x="337" y="420">Preview capped at 1,000 rows</text>
+
+  <rect class="box green" x="735" y="320" width="210" height="116"/>
+  <text class="head" x="755" y="352">6a · Numeric chat</text>
+  <text class="body" x="755" y="378">Recognized totals and</text>
+  <text class="body" x="755" y="399">rankings computed locally</text>
+  <text class="tiny" x="755" y="420">No Gemini request</text>
+
+  <rect class="box purple" x="985" y="320" width="165" height="116"/>
+  <text class="head" x="1004" y="352">6b · Open chat</text>
+  <text class="body" x="1004" y="378">Relevant aggregates</text>
+  <text class="body" x="1004" y="399">→ streamed answer</text>
+  <text class="tiny" x="1004" y="420">Gemini API</text>
+
+  <path class="arrow" d="M725 226 V278 H490 V312"/>
+  <path class="arrow" d="M665 378 H727"/>
+  <path class="arrow" d="M945 378 H977"/>
+  <path class="dash" d="M1067 312 V276 H845 V312"/>
+  <text class="tiny" x="916" y="269">fallback when needed</text>
+
+  <rect class="box orange" x="315" y="500" width="835" height="94"/>
+  <text class="head" x="340" y="533">Server-side configuration &amp; data boundaries</text>
+  <text class="body" x="340" y="558">GEMINI_API_KEY stays in environment / .env · original statement is not uploaded wholesale</text>
+  <text class="body" x="340" y="579">Categorization sends cleaned tokens; chat sends selected aggregates, question, and short history</text>
+  <path class="dash" d="M1030 500 V451"/>
+
+  <rect class="tag" x="50" y="640" width="1100" height="62"/>
+  <text class="tagtext" x="72" y="666">CURRENT SCOPE</text>
+  <text class="body" x="72" y="687">One uploaded statement per analysis · local JSON merchant cache · no active multi-statement SQLite reporting</text>
+</svg>
