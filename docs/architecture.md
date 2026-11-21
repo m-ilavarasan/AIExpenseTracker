@@ -24,6 +24,7 @@ flowchart TD
     J --> W
     W --> R
     R --> D[Category totals, transaction preview, CSV download]
+    R --> F[Linear-trend forecast for selected next 1–12 months]
     R --> Q{Spending question}
     Q -->|Recognized numeric report question| A[Answer from report aggregates locally]
     Q -->|Open-ended question| X[Select relevant aggregates and recent chat]
@@ -48,10 +49,15 @@ flowchart TD
 5. pandas builds category and monthly/merchant aggregates for the report and
    chat context. The app displays up to 1,000 transactions and offers the full
    categorized CSV as a download.
-6. Recognized numeric questions (such as overall spend, category totals, or
-   highest/lowest month/category) are computed locally. Other questions send a
-   selected aggregate context and up to four recent messages to Gemini; tokens
-   are streamed back to the UI.
+6. Recognized report questions (such as overall spend, category totals,
+   highest/lowest month/category, or where to reduce spending) are answered
+   locally from the statement aggregates. Reduction suggestions identify the
+   highest-spend category and recommend reviewing optional costs. Other
+   questions send all available aggregates and up to four recent messages to
+   Gemini; tokens are streamed back to the UI.
+7. The dashboard can project monthly totals for a selected horizon of 1–12
+   months using a linear trend over the statement's monthly totals. Missing
+   months are treated as zero; the forecast is an estimate, not a guarantee.
 
 ## Gemini API integration
 
@@ -64,7 +70,7 @@ HTTP requests.
 | Use | SDK call | Input | Output |
 |---|---|---|---|
 | Categorize unknown merchants | `client.models.generate_content` | Up to 150 cleaned, unique merchant tokens; allowed category list and Indian narration hints | JSON matching `BatchClassification`, with a `merchant_key` and `category` per result |
-| Open-ended spending chat | `client.models.generate_content_stream` | Question, selected aggregates, and at most four prior chat messages | Streamed text, capped at 256 output tokens |
+| Open-ended spending chat | `client.models.generate_content_stream` | Question, all available aggregates, and at most four prior chat messages | Streamed text, capped at 256 output tokens |
 
 Categorization config requests `application/json`, uses the Pydantic
 `BatchClassification` response schema, and sets temperature to `0.1`. Chat uses
@@ -103,9 +109,10 @@ the server-side Python app and is not included in report data or browser UI.
 - Categorization can send cleaned merchant tokens for cache misses. For UPI
   narrations, the current cleaner may retain the payee and VPA in that token;
   inspect or further redact data if that is not acceptable for your use case.
-- Chat sends selected aggregate totals, cleaned merchant labels when relevant,
-  the user's question, and a short conversation history. It does not send the
-  raw transaction table or original narration column as chat context.
+- Chat sends total, monthly, category, monthly-category, and up to 100 cleaned
+  merchant aggregates, plus the user's question and a short conversation
+  history. It does not send individual transactions or original narrations as
+  chat context.
 - `merchant_cache.json` is local and can contain merchant strings and
   categories. Treat it as potentially sensitive local data.
 - The current report and chat context live in Streamlit session state. The
@@ -115,10 +122,14 @@ the server-side Python app and is not included in report data or browser UI.
 
 - One uploaded statement is analyzed at a time; multi-month history requires
   uploading a statement that includes those months.
+- Expense forecasts use a linear monthly trend, treat missing months as zero,
+  and do not account for seasonality or guarantee future spending.
 - Currency is not inferred or normalized. Totals remain in the statement's
   currency.
-- The local question matcher covers common numerical questions, not arbitrary
-  natural-language analysis; unmatched questions go to Gemini.
+- The local question matcher covers common report questions and a basic
+  highest-spend-category reduction suggestion. Open-ended questions go to
+  Gemini with aggregate context; transaction-specific questions cannot be
+  answered reliably because individual records are not included.
 - Gemini latency and availability depend on the configured model and service.
 - The dashboard currently requires `GEMINI_API_KEY` before analysis even when
   all merchants could be resolved by local rules/cache.

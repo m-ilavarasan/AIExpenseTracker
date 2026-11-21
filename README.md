@@ -36,8 +36,12 @@ diagram, Gemini API details, data handling notes, and current limitations.
   sending uncached merchant tokens to Gemini in batches of up to 150.
 - Explore spending by category and preview categorized transactions; download
   the complete result as CSV.
-- Ask spending questions. Common numeric report questions are answered locally;
-  other questions use a streamed Gemini response based on relevant aggregates.
+- View a selectable 1–12 month, linear-trend estimate of future spending based
+  on the uploaded statement's monthly totals.
+- Ask open-ended spending questions using the current statement's full
+  aggregate context; the app also answers common report questions and basic
+  reduction suggestions locally. Individual transaction records are not sent
+  to Gemini.
 - Reuse parsed uploads during Streamlit reruns and report basic parsing,
   processing, and Gemini batch timings.
 
@@ -67,6 +71,7 @@ use local/cache categories.
 
 ```text
 app.py                  Streamlit UI, categorization, reporting, and chat
+expense_forecast.py     Trend-based monthly expense forecasts
 merchant_cache.json     Generated local merchant-to-category cache
 docs/architecture.md    System flow, API details, and data handling
 docs/assets/            Architecture and synthetic sample visuals
@@ -86,4 +91,6 @@ python -m unittest discover -s tests -p "test_*.py"
 The app analyzes the uploaded statement in the current Streamlit session. The
 merchant cache is local; persistent multi-statement SQLite history is not part
 of the active dashboard flow. See the architecture notes for additional privacy
-and data-scope details.
+and data-scope details. Forecasts use a linear monthly trend, treat months
+without recorded expenses as zero, and do not account for seasonality or
+guarantee future spending.

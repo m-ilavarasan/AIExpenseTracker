@@ -7,6 +7,28 @@ from streamlit.testing.v1 import AppTest
 
 
 class DashboardCategoryTests(unittest.TestCase):
+    def test_missing_api_key_explains_configuration(self) -> None:
+        statement = b"Date,Narration,Debit\n2026-01-03,SWIGGY ORDER,250\n"
+        app_path = Path(__file__).resolve().parents[1] / "app.py"
+        with patch.dict("os.environ", {"GEMINI_API_KEY": ""}):
+            app = AppTest.from_file(app_path, default_timeout=20).run()
+            app.file_uploader[0].upload(
+                "statement.csv", statement, "text/csv"
+            ).run()
+            next(
+                button
+                for button in app.button
+                if button.label == "Analyze & Categorize Expenses"
+            ).click().run()
+
+        self.assertEqual(app.exception, [])
+        self.assertTrue(
+            any(
+                "Copy .env.example to .env" in error.value
+                for error in app.error
+            )
+        )
+
     def test_dashboard_categorizes_local_merchant_rules(self) -> None:
         statement = b"Date,Narration,Debit\n2026-01-03,SWIGGY ORDER,250\n"
         app_path = Path(__file__).resolve().parents[1] / "app.py"
@@ -79,8 +101,10 @@ class DashboardCategoryTests(unittest.TestCase):
         self.assertTrue(client.closed)
         self.assertEqual(client.exit_args, (None, None, None))
         self.assertIn("total_expenses", client.prompt)
+        self.assertIn("monthly_totals", client.prompt)
+        self.assertIn("category_totals", client.prompt)
+        self.assertIn("monthly_category_totals", client.prompt)
         self.assertIn("top_merchant_totals", client.prompt)
-        self.assertNotIn("monthly_category_totals", client.prompt)
         self.assertIn("SWIGGY", client.prompt)
         self.assertNotIn("MERCHANT@UPI", client.prompt)
         self.assertNotIn("123456789", client.prompt)
@@ -103,6 +127,10 @@ class DashboardCategoryTests(unittest.TestCase):
             ("Show my category totals.", "Food & Dining: 750.00"),
             ("How much did I spend on Shopping?", "175.00"),
             ("Which category did I spend most on?", "Food & Dining"),
+            (
+                "What's your suggestion for reducing my expenses?",
+                "Food & Dining is your highest-spend category",
+            ),
         ]
 
         with (
@@ -128,6 +156,8 @@ class DashboardCategoryTests(unittest.TestCase):
                     "content"
                 ]
                 self.assertIn(expected_answer, answer)
+                if "suggestion" in question:
+                    self.assertIn("set a realistic spending limit", answer)
 
         self.assertEqual(app.exception, [])
         gemini_client.assert_not_called()
